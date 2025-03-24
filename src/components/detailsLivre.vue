@@ -70,6 +70,12 @@ methods : {
     margin: 20px 0;
     margin-bottom : 50px;
 }
+button {
+    color : white;
+    font-family: Arial, Helvetica, sans-serif;
+    padding : 10px;
+    background-color:rgb(110, 7, 7);
+}
 button:hover {
     background-color: #06386e;
 }
