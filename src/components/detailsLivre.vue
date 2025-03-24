@@ -41,7 +41,7 @@ methods : {
     },
     async fetchBook(){
         try{
-            const response = await fetch(`http://localhost:3008/livres/${this.id}`);
+            const response = await fetch(`http://localhost:3009/livres/${this.id}`);
             this.book = await response.json();
         }
         catch (error) {
