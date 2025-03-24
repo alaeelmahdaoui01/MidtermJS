@@ -1,18 +1,39 @@
 <template>
-    <div class="tout">
+    <div class="tt">
 
-        <h1>Available Books</h1>
-        
-        <div class="books">
-            <div v-for="book in filteredBooks" :key="book.id" class="book">
-                <router-link :to="'/details/' + book.id" class="link"><img :src="book.image"/></router-link>
-                <div><router-link :to="'/details/' + book.id" class="link">{{ book.titre }}</router-link></div>
-                
+        <div class="tout2">
+            <h1>Search Book </h1>
+            <br>
+            <div class="filtre">
+                <input type="text" v-model="text" @input="filterBooks(text)"/>
+            </div>
+            <br>
+            <div class="dispo">
+                Dispo:  
+                <select v-model="disponible">
+                    <option value="Toutes" selected>Toutes</option>
+                    <option value="Disponible en stock">Disponible en stock</option>
+                    <option value="En rupture de stock" >En rupture de stock</option>
+                </select> 
+            </div>
+
+        </div>
+
+        <div class="tout">
+            <h1>Available Books</h1>
+            <br>
+            <div class="books">
+                <div v-for="book in filteredBooks" :key="book.id" class="book">
+                    
+                        <div><router-link :to="'/details/' + book.id" class="link">{{ book.titre }}</router-link></div> 
+                        <div class="auteur"><router-link :to="'/details/' + book.id" class="link2">{{ book.auteur }}</router-link></div> 
+
+                </div>
             </div>
         </div>
 
     </div>
-  </template>
+</template>
   
 <script>
 
@@ -23,9 +44,10 @@ name: 'HomeView',
 
 data(){
     return {
-        showFilter : false ,
         books : [],
         filteredBooks: [],
+        text: "",
+        disponible: "Toutes" ,
     };
 },
 async mounted(){
@@ -34,7 +56,7 @@ async mounted(){
 methods:{
     async fetchBooks(){
         try{
-            const response = await fetch("http://localhost:3007/livres");
+            const response = await fetch("http://localhost:3008/livres");
             this.books = await response.json();
             this.filteredBooks=this.books;
         }
@@ -42,13 +64,11 @@ methods:{
             console.error("Error fetching books:", error);
         }
     },
-    
-    toggleFilter() {
-        this.showFilter = !this.showFilter; // Toggle the visibility of the FilterNav component
-        },
+
     filterBooks(text){
         const search = text.toLowerCase();
-        this.filteredBooks = this.books.filter( (book) => book.titre.toLowerCase().includes(search) );
+        this.filteredBooks = this.books.filter( (book) => (((book.titre.toLowerCase().includes(search) )|| (book.auteur.toLowerCase().includes(search) )) 
+        && ((book.disponible==true && this.disponible=="Disponible en stock") || (book.disponible==false && this.disponible=="En rupture de stock") || this.disponible=="Toutes")  ) );
 },
 },
 
@@ -58,7 +78,24 @@ methods:{
 
 
 <style scoped>
-.jobs {
+
+.dispo {
+    font-weight : bold;
+    color : rgb(165, 7, 7);
+}
+input, select{
+    padding : 10px;
+    font-family :Arial, Helvetica, sans-serif;
+    border-radius : 2px;
+    font-size : 18px
+}
+
+.tt{
+    display:flex;
+    flex-direction : row;
+    gap : 10px;
+}
+.books {
     margin-top: 20px;
     display: flex;
     flex-direction: column;
@@ -67,9 +104,9 @@ methods:{
     margin-bottom: 50px;
 }
 
-.job {
+.book {
     text-align : center;
-    padding: 15px;
+    padding: 40px;
     border: 1px solid #f0eded;
     border-radius: 8px;
     width: 50%;
@@ -78,7 +115,7 @@ methods:{
     cursor:pointer; 
 }
 
-.job:hover {
+.book:hover {
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 }
 
@@ -91,14 +128,27 @@ methods:{
     transition: color 0.2s;
 }
 .link:hover {
-    color: #246ab6;
+    color: #9b1313;
+    text-decoration: underline;
+}
+
+.link2{
+    text-decoration : none; 
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: #06376b;
+    transition: color 0.2s;
+}
+.link2:hover {
+    color: #940f0f;
     text-decoration: underline;
 }
 
 h1 {
     font-family: 'Arial', sans-serif;
     font-size: 28px;
-    color: #333;
+    color: #041d61;
     text-align: center;
     margin-top: 20px;
     margin-bottom: 10px;
@@ -134,12 +184,24 @@ button:hover {
     background-color: #06386e;
 }
 .tout {
-    border: 2px solid #ddd; /* Bordure grise */
-     /* Couleur de fond grise */
-    border-radius: 10px; /* Coins arrondis pour un design plus moderne */
-    padding: 20px; /* Espacement interne pour éviter que le contenu touche la bordure */
-    margin: 50px auto; /* Centrer le conteneur horizontalement */
-    max-width: 800px; /* Limiter la largeur maximale */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ajouter une ombre légère */
+    border: 2px solid #ddd; 
+    border-radius: 10px; 
+    padding: 20px;
+    width : 65%;
+    margin: 50px auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+}
+.tout2 {
+    height : 500px;
+    display:flex;
+    flex-direction : column;
+    gap : 10px;
+    border: 2px solid #ddd; 
+    border-radius: 10px; 
+    padding: 20px;
+    width : 20%;
+    margin: 50px auto;
+    max-width: 800px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
 }
 </style>

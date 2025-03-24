@@ -8,7 +8,8 @@ const routes = [{
     },
     {
         path: '/details/:id',
-        component: detailsLivre
+        component: detailsLivre,
+        props: true,
     },
 ]
 

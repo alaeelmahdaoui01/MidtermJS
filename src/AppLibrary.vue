@@ -1,7 +1,8 @@
 <template>
   <nav>
-    <router-link to="/">Home</router-link> 
+    <router-link to="/" class="home">Home</router-link> 
   </nav>
+  <h1> Gestion de bibliothèque universitaire </h1>
   <router-view/>
 </template>
 
@@ -24,6 +25,11 @@ nav a {
 }
 
 nav a.router-link-exact-active {
-  color: #42b983;
+  color: #921d08;
+}
+
+.home{
+  color : rgb(8, 8, 83);
+  font-size : 20px;
 }
 </style>
